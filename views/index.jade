@@ -1,0 +1,19 @@
+extends layout
+
+block content
+  div.row
+    div.span12
+      form(ng-submit="submit()")
+        fieldset
+          legend CSRF
+          label(for="name") POST some text
+          input(type="text", id="name", ng-model="value", name="name")
+          br
+          button.btn(type="submit") Submit
+  div.row
+    div.span12
+      div.alert(ng-show="answer")
+        strong Yeah!
+        span  You've sent 
+          strong {{answer}} 
+          | to the server and back. With CSRF enabled! Well done.
