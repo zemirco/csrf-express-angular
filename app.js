@@ -22,7 +22,7 @@ app.use(express.cookieParser('your secret here'));
 app.use(express.cookieSession());
 app.use(express.csurf());
 app.use(function(req, res, next) {
-  res.cookie('XSRF-TOKEN', req.session._csrf);
+  res.cookie('XSRF-TOKEN', req.csrfToken());
   next();
 });
 app.use(app.router);
