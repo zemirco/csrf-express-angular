@@ -23,6 +23,10 @@ app.use(express.cookieSession());
 app.use(express.csurf());
 app.use(function(req, res, next) {
   res.cookie('XSRF-TOKEN', req.csrfToken());
+  // res.cookie() is only available with Express
+  // if using Connect without Express, then set cookie
+  // res.setHeader('set-cookie', require('cookie').serialize('XSRF-TOKEN', req.csrfToken(),
+  //   {maxAge:60*60, httpOnly:true, secure:true}));
   next();
 });
 app.use(app.router);
