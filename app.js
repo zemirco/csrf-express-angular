@@ -10,14 +10,6 @@ var express = require('express')
 
 var app = express();
 
-var csrfValue = function(req) {
-  var token = (req.body && req.body._csrf)
-    || (req.query && req.query._csrf)
-    || (req.headers['x-csrf-token'])
-    || (req.headers['x-xsrf-token']);
-  return token;
-};
-
 // all environments
 app.set('port', process.env.PORT || 3000);
 app.set('views', __dirname + '/views');
@@ -28,9 +20,13 @@ app.use(express.bodyParser());
 app.use(express.methodOverride());
 app.use(express.cookieParser('your secret here'));
 app.use(express.cookieSession());
-app.use(express.csrf({value: csrfValue}));
+app.use(express.csurf());
 app.use(function(req, res, next) {
-  res.cookie('XSRF-TOKEN', req.session._csrf);
+  res.cookie('XSRF-TOKEN', req.csrfToken());
+  // res.cookie() is only available with Express
+  // if using Connect without Express, then set cookie
+  // res.setHeader('set-cookie', require('cookie').serialize('XSRF-TOKEN', req.csrfToken(),
+  //   {maxAge:60*60, httpOnly:true, secure:true}));
   next();
 });
 app.use(app.router);
